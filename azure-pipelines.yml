@@ -97,7 +97,7 @@ stages:
             displayName: 'Deploy Azure Web App : final-cicd-dev123'
             inputs:
               azureSubscription: $(azureServiceConnectionId)
-              appName: final-cicd-dev123
+              appName: 'final-cicd-dev123'
               package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
 
 #Deploy to testing
@@ -124,7 +124,7 @@ stages:
             displayName: 'Deploy Azure Web App : final-cicd-test123'
             inputs:
               azureSubscription: $(azureServiceConnectionId)
-              appName: final-cicd-test123
+              appName: 'final-cicd-test123'
               package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
           
           #Run functional tests
@@ -165,5 +165,5 @@ stages:
             displayName: 'Deploy Azure Web App : final-cicd-staging123'
             inputs:
               azureSubscription: $(azureServiceConnectionId)
-              appName: final-cicd-staging123
+              appName: 'final-cicd-staging123'
               package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
