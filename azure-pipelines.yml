@@ -140,5 +140,30 @@ stages:
               searchFolder: $(Pipeline.Workspace)
               testResultsFiles: '**/test-*.xml'
             displayName: 'Publish test results'
-            
-            
+
+#Deploy to staging           
+- stage: Deploy
+  displayName: 'Deploy to staging'
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - deployment: DeploymentJob
+    pool:
+      vmImage: $(vmImageName)
+    environment: Dev
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          
+          - task: UsePythonVersion@0
+            inputs:
+              versionSpec: '$(pythonVersion)'
+            displayName: 'Use Python version'
+
+          - task: AzureWebApp@1
+            displayName: 'Deploy Azure Web App : final-cicd-dev123'
+            inputs:
+              azureSubscription: $(azureServiceConnectionId)
+              appName: $(webAppNameStaging)
+              package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
