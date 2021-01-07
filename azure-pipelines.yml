@@ -121,7 +121,7 @@ stages:
             displayName: 'Use Python version'
 
           - task: AzureWebApp@1
-            displayName: 'Deploy Azure Web App : final-cicd-dev123'
+            displayName: 'Deploy Azure Web App : final-cicd-test123'
             inputs:
               azureSubscription: $(azureServiceConnectionId)
               appName: $(webAppNameTest)
@@ -131,7 +131,7 @@ stages:
           - script: |
               pip install selenium
               pip install pytest
-              pytest tests/functional_tests/ --webAppUrl=https://$(webAppName).azurewebsites.net --junitxml=$(System.DefaultWorkingDirectory)/TestResults/test-results-functional.xml
+              pytest tests/functional_tests/ --webAppUrl=https://$(webAppNameTest).azurewebsites.net --junitxml=$(System.DefaultWorkingDirectory)/TestResults/test-results-functional.xml
             workingDirectory: $(Pipeline.Workspace)
             displayName: 'Run functional tests'
 
@@ -162,7 +162,7 @@ stages:
             displayName: 'Use Python version'
 
           - task: AzureWebApp@1
-            displayName: 'Deploy Azure Web App : final-cicd-dev123'
+            displayName: 'Deploy Azure Web App : final-cicd-staging123'
             inputs:
               azureSubscription: $(azureServiceConnectionId)
               appName: $(webAppNameStaging)
