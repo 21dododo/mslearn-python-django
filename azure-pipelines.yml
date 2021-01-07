@@ -74,7 +74,7 @@ stages:
       artifact: tests
 
 #Deploy to development
-- stage: Deploy Dev
+- stage: Deploy_Dev
   displayName: 'Deploy to development'
   dependsOn: Build
   condition: succeeded()
@@ -101,7 +101,7 @@ stages:
               package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
 
 #Deploy to testing
-- stage: Deploy Test
+- stage: Deploy_Test
   displayName: 'Deploy to testing'
   dependsOn: Build
   condition: succeeded()
@@ -142,7 +142,7 @@ stages:
             displayName: 'Publish test results'
 
 #Deploy to staging           
-- stage: Deploy Staging
+- stage: Deploy_Staging
   displayName: 'Deploy to staging'
   dependsOn: Build
   condition: succeeded()
