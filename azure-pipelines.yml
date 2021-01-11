@@ -80,7 +80,7 @@ stages:
     - publish: $(System.DefaultWorkingDirectory)/Tests
       artifact: tests
 
-- stage: Deploy Dev
+- stage: Deploy_Dev
   displayName: 'Deploy to dev'
   dependsOn: Build
   condition: succeeded()
@@ -106,7 +106,7 @@ stages:
               appName: $(webAppDev)
               package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
 
-- stage: Deploy Test
+- stage: Deploy_test
   displayName: 'Deploy to test'
   dependsOn: Build
   condition: succeeded()
