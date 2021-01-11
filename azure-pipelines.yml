@@ -102,7 +102,7 @@ stages:
           - task: AzureWebApp@1
             displayName: 'Deploy Azure Web App : final-cicd-dev123'
             inputs:
-              azureSubscription: 'final-cicd-connection'
+              azureSubscription: $(azureServiceConnectionId)
               appName: $(webAppDev)
               package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
 
@@ -128,6 +128,6 @@ stages:
           - task: AzureWebApp@1
             displayName: 'Deploy Azure Web App : final-cicd-test123'
             inputs:
-              azureSubscription: 'final-cicd-connection'
+              azureSubscription: $(azureServiceConnectionId)
               appName: $(webAppTest)
               package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
