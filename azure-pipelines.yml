@@ -11,13 +11,15 @@ variables:
   azureServiceConnectionId: '9bc00ef9-3d3e-4723-8553-79869f57c0b9'
   
   # Web app name
-  webAppName: 'final-cicd-dev123'
+  webAppDev: 'final-cicd-dev123'
+  webAppTest: 'final-cicd-test-123'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
 
   # Environment name
-  environmentName: 'final-cicd-dev123'
+  environmentDev: 'final-cicd-dev123'
+  environmentTest: 'final-cicd-test123'
 
   # Project root folder. Point to the folder containing manage.py file.
   projectRoot: $(System.DefaultWorkingDirectory)/Application
@@ -78,15 +80,15 @@ stages:
     - publish: $(System.DefaultWorkingDirectory)/Tests
       artifact: tests
 
-- stage: Deploy
-  displayName: 'Deploy Web App'
+- stage: Deploy Dev
+  displayName: 'Deploy to dev'
   dependsOn: Build
   condition: succeeded()
   jobs:
   - deployment: DeploymentJob
     pool:
       vmImage: $(vmImageName)
-    environment: $(environmentName)
+    environment: $(environmentDev)
     strategy:
       runOnce:
         deploy:
@@ -101,5 +103,31 @@ stages:
             displayName: 'Deploy Azure Web App : final-cicd-dev123'
             inputs:
               azureSubscription: $(azureServiceConnectionId)
-              appName: $(webAppName)
+              appName: $(webAppDev)
+              package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
+
+- stage: Deploy Test
+  displayName: 'Deploy to test'
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - deployment: DeploymentJob
+    pool:
+      vmImage: $(vmImageName)
+    environment: $(environmentTest)
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          
+          - task: UsePythonVersion@0
+            inputs:
+              versionSpec: '$(pythonVersion)'
+            displayName: 'Use Python version'
+
+          - task: AzureWebApp@1
+            displayName: 'Deploy Azure Web App : final-cicd-test123'
+            inputs:
+              azureSubscription: $(azureServiceConnectionId)
+              appName: $(webAppTest)
               package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
