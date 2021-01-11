@@ -13,6 +13,7 @@ variables:
   # Web app name
   webAppDev: 'final-cicd-dev123'
   webAppTest: 'final-cicd-test123'
+  webAppStaging: 'final-cicd-staging123'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -20,6 +21,7 @@ variables:
   # Environment name
   environmentDev: 'final-cicd-dev123'
   environmentTest: 'final-cicd-test123'
+  environmentStaging: 'final-cicd-staging123'
 
   # Project root folder. Point to the folder containing manage.py file.
   projectRoot: $(System.DefaultWorkingDirectory)/Application
@@ -80,7 +82,7 @@ stages:
     - publish: $(System.DefaultWorkingDirectory)/Tests
       artifact: tests
 
-- stage: Deploy_Dev
+- stage: Deploy_dev
   displayName: 'Deploy to dev'
   dependsOn: Build
   condition: succeeded()
@@ -145,3 +147,29 @@ stages:
               searchFolder: $(Pipeline.Workspace)
               testResultsFiles: '**/test-*.xml'
             displayName: 'Publish test results'
+
+- stage: Deploy_staging
+  displayName: 'Deploy to staging'
+  dependsOn: Deploy_test
+  condition: succeeded()
+  jobs:
+  - deployment: DeploymentJob
+    pool:
+      vmImage: $(vmImageName)
+    environment: $(environmentStaging)
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          
+          - task: UsePythonVersion@0
+            inputs:
+              versionSpec: '$(pythonVersion)'
+            displayName: 'Use Python version'
+
+          - task: AzureWebApp@1
+            displayName: 'Deploy Azure Web App : final-cicd-staging123'
+            inputs:
+              azureSubscription: $(azureServiceConnectionId)
+              appName: $(webAppStaging)
+              package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
