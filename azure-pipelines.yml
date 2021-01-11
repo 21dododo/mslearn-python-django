@@ -12,7 +12,7 @@ variables:
   
   # Web app name
   webAppDev: 'final-cicd-dev123'
-  webAppTest: 'final-cicd-test-123'
+  webAppTest: 'final-cicd-test123'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
